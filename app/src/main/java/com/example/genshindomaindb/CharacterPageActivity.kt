@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import java.io.IOException
 import java.lang.Exception
+import java.util.*
 
 class CharacterPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +28,11 @@ class CharacterPageActivity : AppCompatActivity() {
         // pictures are from FateTempest on reddit
         // source : https://www.reddit.com/r/Genshin_Impact/comments/km1z2t/more_f2u_genshin_impact_icons_ganyu_albedo_and/
         val characterImageView : ImageView = findViewById(R.id.characterImageView) as ImageView
-        val imageResource = resources.getIdentifier(character?.toLowerCase(), "drawable", packageName)
+        val imageResource = resources.getIdentifier(character?.toLowerCase(Locale.ROOT), "drawable", packageName)
         var characterAvatarDrawable : Drawable
 
+        // try to set picture to specified character
+        // defaults to diluc if picture does not exist
         try {
             characterAvatarDrawable = resources.getDrawable(imageResource)
         }

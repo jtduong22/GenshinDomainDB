@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 const val EXTRA_CHARACTER = "com.example.genshindomaindb.CHARACTER_NAME"
 const val EXTRA_BOOKSET = "com.example.genshindomaindb.BOOK_SET_ID"
@@ -18,22 +15,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        testReadDB()
-
-        // generate list
-        var adapter = SimpleAdapter(generateItemList(testReadDB()))
-
-        // generate view
-        var recyclerView: RecyclerView = findViewById(R.id.domain_recyclerview) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        // Open to Character List
+        _startCharacterListActivity()
     }
 
     // test function read from database
     fun testReadDB () : List<String>
     {
         // open database
-        val db: DBHelper = DBHelper(this)
+        val db = DBHelper(this)
 
         // query database
         val c: Cursor = db.readableDatabase.rawQuery("select * from items", null)
@@ -63,43 +53,15 @@ class MainActivity : AppCompatActivity() {
 
         // close database
         c.close()
+        db.close()
 
         return items
     }
 
-    // test function populate
-    fun testPopulateTable()
-    {
-        
-    }
-
-    ///// EARLY TESTING FUNCTION FOR RECYCLER VIEW /////
-
-    private fun generateSimpleList() : List<SimpleViewModel> {
-        var simpleViewModeList = ArrayList<SimpleViewModel>()
-
-        for (i in 0..100) {
-            simpleViewModeList.add(SimpleViewModel("This is item ${i}"))
-        }
-
-        return simpleViewModeList
-    }
-
-    private fun generateItemList(items : List<String>) : List<SimpleViewModel>
-    {
-        var simpleViewModelList = ArrayList<SimpleViewModel>()
-
-        for (item in items)
-        {
-            simpleViewModelList.add(SimpleViewModel(item))
-        }
-
-        return simpleViewModelList
-    }
-
+    ///// EARLY TESTING FUNCTIONS TO OPEN STRAIGHT TO PAGE /////
 
     // open up character page
-    fun _startActivity(view: View)
+    fun _startActivity()
     {
 
         val intent = Intent(this, CharacterPageActivity::class.java)
@@ -107,6 +69,14 @@ class MainActivity : AppCompatActivity() {
         // pass data for page to parse
         intent.putExtra(EXTRA_CHARACTER, "Chongyun")
         intent.putExtra(EXTRA_BOOKSET, 10)
+
+        startActivity(intent)
+    }
+
+    // open up character list page
+    fun _startCharacterListActivity()
+    {
+        val intent = Intent(this, CharacterListPageActivity::class.java)
 
         startActivity(intent)
     }
